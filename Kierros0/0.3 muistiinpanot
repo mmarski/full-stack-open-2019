@@ -1,0 +1,17 @@
+title Kayttaja navigoi sivulle https://fullstack-exampleapp.herokuapp.com/notes
+
+kayttaja->selain: Kayttaja avaa sivun
+
+selain->palvelin: GET /notes HTML
+palvelin->selain: Response with code 200
+
+selain->palvelin: GET main.css
+palvelin->selain: Response with code 200
+
+selain->palvelin: GET main.js
+palvelin->selain: Response with code 200
+
+selain->palvelin: GET data.json
+palvelin->selain: Response with code 200
+
+selain->kayttaja: Selain nayttaa sivun sisaltoineen

@@ -1,0 +1,18 @@
+title Kayttaja tallettaa uuden kommentin spa:ssa
+
+kayttaja->selain: Kayttaja kirjoittaa kommentin
+kayttaja->selain: Kayttaja klikkaa "Talleta"
+
+selain->palvelin: POST new_note_spa JSON
+note left of palvelin
+Palvelin kasittelee uuden kommentin,
+ja paivittaa tietokannan
+end note
+palvelin->selain: Response with code 201
+note left of palvelin
+Vastaus paivitetysta tietokannasta, ja
+lista voidaan paivittaa
+lataamatta uudelleen sivua
+end note
+
+selain->kayttaja: Selain paivittaa muistiinpanosektion

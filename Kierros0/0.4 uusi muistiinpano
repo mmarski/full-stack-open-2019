@@ -1,0 +1,25 @@
+title Kayttaja tallettaa uuden kommentin
+
+kayttaja->selain: Kayttaja kirjoittaa kommentin
+kayttaja->selain: Kayttaja klikkaa "Talleta"
+
+selain->palvelin: POST new_note HTML
+note left of palvelin
+Palvelin kasittelee uuden kommentin, tallentaa sen data.jsoniin
+ja ohjaa selaimen lataamaan sivun uudelleen
+end note
+palvelin->selain: Response with code 302
+
+selain->palvelin: GET /notes HTML
+palvelin->selain: Response with code 200
+
+selain->palvelin: GET main.css
+palvelin->selain: Response with code 304
+
+selain->palvelin: GET main.js
+palvelin->selain: Response with code 304
+
+selain->palvelin: GET data.json
+palvelin->selain: Response with code 200
+
+selain->kayttaja: Selain nayttaa sivun sisaltoineen
