@@ -41,11 +41,106 @@ const App = () => {
     }
     return (
         <div>
-            <Otsikko kurssi={kurssi.nimi} />
-            <Sisalto osat={kurssi.osat} />
-            <Yhteensa osat={kurssi.osat} />
+            <div>
+                <Otsikko kurssi={kurssi.nimi} />
+                <Sisalto osat={kurssi.osat} />
+                <Yhteensa osat={kurssi.osat} />
+            </div>
+            <div id="unicafe"></div>
         </div>
     )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
+
+class Button extends React.Component {
+    constructor(props) {
+        super(props)
+        this.name = props.name
+        this.onClick = props.onClick
+    }
+
+    render() {
+        return <button onClick={this.onClick}>{this.name}</button>
+    }
+}
+
+class Statistics extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            hyvat: 0,
+            neutraalit: 0,
+            pahat: 0
+        }
+
+        this.good = this.good.bind(this)
+        this.neut = this.neut.bind(this)
+        this.bad = this.bad.bind(this)
+    }
+}
+
+class Statistic extends React.Component {
+    constructor(props) {
+        super(props)
+        this.name = props.name
+        this.state = {
+            value: 0
+        }
+
+        this.plus = this.plus.bind(this)
+    }
+    plus() {
+        this.setState({value: this.state.value + 1})
+    }
+}
+
+class Unicafe extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            hyvat: 0,
+            neutraalit: 0,
+            pahat: 0
+        }
+
+        this.good = this.good.bind(this)
+        this.neut = this.neut.bind(this)
+        this.bad = this.bad.bind(this)
+    }
+
+    good() {
+        this.setState({hyvat: this.state.hyvat + 1})
+    }
+    neut() {
+        this.setState({neutraalit: this.state.neutraalit + 1})
+    }
+    bad() {
+        this.setState({pahat: this.state.pahat + 1})
+    }
+    keskiarvo() {
+        return (this.state.hyvat - this.state.pahat) / (this.state.hyvat + this.state.neutraalit + this.state.pahat)
+    }
+    positiivisia() {
+        return (this.state.hyvat / (this.state.hyvat + this.state.neutraalit + this.state.pahat)) * 100 + " %"
+    }
+    
+    render() {
+        return (
+            <div>
+                <h1>Anna palautetta</h1>
+                <Button name="Testinappi" onClick={this.good} />
+                <button onClick={this.good}>Hyvä</button>
+                <button onClick={this.neut}>Neutraali</button>
+                <button onClick={this.bad}>Huono</button>
+                <h2>Statistiikka</h2>
+                <p>Hyvä {this.state.hyvat}</p>
+                <p>Neutraali {this.state.neutraalit}</p>
+                <p>Huono {this.state.pahat}</p>
+                <p>Keskiarvo {this.keskiarvo()}</p>
+                <p>Positiivisia {this.positiivisia()}</p>
+            </div>
+        )
+    }
+}
+ReactDOM.render(<Unicafe />, document.getElementById('unicafe'));
