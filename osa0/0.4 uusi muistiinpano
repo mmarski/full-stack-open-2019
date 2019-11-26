@@ -11,7 +11,7 @@ end note
 palvelin->selain: Response with code 302
 
 selain->palvelin: GET /notes HTML
-palvelin->selain: Response with code 200
+palvelin->selain: Response with code 304
 
 selain->palvelin: GET main.css
 palvelin->selain: Response with code 304
