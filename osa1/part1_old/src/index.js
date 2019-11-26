@@ -5,15 +5,15 @@ const Otsikko = (props) => (
     <h1>{props.kurssi}</h1>
 )
 
-const Osa = (props) => (
+const Part = (props) => (
     <p>{props.osa.nimi} {props.osa.tehtavia}</p>
 )
 
-const Sisalto = (props) => (
+const Content = (props) => (
     <React.Fragment>
-        <Osa osa={props.osat[0]} />
-        <Osa osa={props.osat[1]} />
-        <Osa osa={props.osat[2]} />
+        <Part osa={props.osat[0]} />
+        <Part osa={props.osat[1]} />
+        <Part osa={props.osat[2]} />
     </React.Fragment>
 )
 
@@ -43,7 +43,7 @@ const App = () => {
         <div>
             <div>
                 <Otsikko kurssi={kurssi.nimi} />
-                <Sisalto osat={kurssi.osat} />
+                <Content osat={kurssi.osat} />
                 <Yhteensa osat={kurssi.osat} />
             </div>
             <div id="unicafe"></div>
