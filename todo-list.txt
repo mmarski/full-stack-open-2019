@@ -6,4 +6,5 @@ Kierros1
 
 Kierros2
     2a DONE
-    2.6 done
+    2.9 done
+    2.10 TODO !
