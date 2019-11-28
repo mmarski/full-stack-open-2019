@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import PersonList from './PersonList';
+import FilterForm from './FilterForm';
+import PersonForm from './PersonForm';
 
 const App = () => {
   const [ persons, setPersons] = useState([
@@ -34,7 +37,7 @@ const App = () => {
   }
   const handleNameFilterChange = (event) => {
     setNameFilter(event.target.value)
-    if (nameFilter == "") {
+    if (nameFilter === "") {
       setShowAll(true)
     }
     else {
@@ -49,25 +52,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>
-          Filter shown with <input value={nameFilter} onChange={handleNameFilterChange}></input>
-        </div>
-      </form>
+      <FilterForm value={nameFilter} onChange={handleNameFilterChange} />
       <h2>Add new</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          Number: <input value={newNumber} onChange={handleNumChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm onSubmit={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumChange={handleNumChange} />
       <h2>Numbers</h2>
-      {personsToShow.map(p => <p key={p.name}>{p.name} {p.number}</p>)}
+      <PersonList personsToShow={personsToShow} />
     </div>
   )
 
