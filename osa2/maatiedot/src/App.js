@@ -43,10 +43,14 @@ function App() {
     }
     return (
        <div>
-         {matches.map(c => <p key={c.name}>{c.name}</p>)}
+         {matches.map(c => <p key={c.name}>{c.name} <button onClick={showCountry(c.name)}>Show</button></p>)}
        </div>
     )
-  } 
+  }
+
+  function showCountry(country) { return () => {
+    setCountryFilter(country)
+  }}
 
   return (
     <div className="App">
