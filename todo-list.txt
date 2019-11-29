@@ -5,5 +5,4 @@ Kierros1
     - DONE
 
 Kierros2
-    2a DONE
-    2.13 DONE
+    2.14 DONE
