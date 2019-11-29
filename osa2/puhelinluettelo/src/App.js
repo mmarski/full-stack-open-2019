@@ -3,6 +3,7 @@ import axios from 'axios';
 import PersonList from './PersonList';
 import FilterForm from './FilterForm';
 import PersonForm from './PersonForm';
+import personService from './services/persons'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
@@ -13,15 +14,34 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    if (persons.find(p => p.name === newName) !== undefined) {
-      window.alert(`${newName} is already added to phonebook`)
+    const foundPerson = persons.find(p => p.name === newName)
+    if (foundPerson !== undefined) {
+      if (window.confirm(`${newName} is already added to phonebook. Replace the number with the new one?`)) {
+        foundPerson.number = newNumber
+        personService.update(foundPerson.id, foundPerson)
+          .then(response => {
+            console.log("Person updated", response)
+            setPersons(persons.map(p => p.id !== foundPerson.id ? p : response.data))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            window.alert("Error updating, check console")
+            console.log(error)
+          })
+      }
       return;
     }
     const personObj = {
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(personObj))
+    personService.create(personObj)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.concat(response.data))
+        //setPersons(persons.map(p => p.id !== response.data.id ? p : response.data))
+      })
     setNewName('')
     setNewNumber('')
   }
@@ -40,10 +60,22 @@ const App = () => {
       setShowAll(false)
     }
   }
+  const handleRemoveEntry = (id, name) => () => {
+    if (window.confirm("Delete "+ name+"?") === true) {
+      personService.remove(id)
+        .then(response => {
+          console.log("Deleted", response)
+          setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(error => {
+          Window.alert("Failed to remove from phonebook, check console")
+          console.log(error)
+        })
+    }
+  }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService.getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -60,7 +92,7 @@ const App = () => {
       <h2>Add new</h2>
       <PersonForm onSubmit={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumChange={handleNumChange} />
       <h2>Numbers</h2>
-      <PersonList personsToShow={personsToShow} />
+      <PersonList personsToShow={personsToShow} removeCallback={handleRemoveEntry} />
     </div>
   )
 
