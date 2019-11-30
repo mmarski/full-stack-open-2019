@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
+import './index.css';
 import PersonList from './PersonList';
 import FilterForm from './FilterForm';
 import PersonForm from './PersonForm';
@@ -11,6 +11,20 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ nameFilter, setNameFilter ] = useState('')
   const [ showAll, setShowAll ] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+
+  const Notification = ({ className, message }) => {
+    if (message === null) {
+      return null
+    }
+  
+    return (
+      <div className={className}>
+        {message}
+      </div>
+    )
+  }
 
   const addName = (event) => {
     event.preventDefault()
@@ -20,14 +34,21 @@ const App = () => {
         foundPerson.number = newNumber
         personService.update(foundPerson.id, foundPerson)
           .then(response => {
-            console.log("Person updated", response)
+            setSuccessMessage(newName + " number updated")
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
             setPersons(persons.map(p => p.id !== foundPerson.id ? p : response.data))
             setNewName('')
             setNewNumber('')
           })
           .catch(error => {
-            window.alert("Error updating, check console")
+            setErrorMessage("Failed to update " + newName + ", data already removed from server. Check console")
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
             console.log(error)
+            setPersons(persons.filter(p => p.id !== foundPerson.id))
           })
       }
       return;
@@ -40,7 +61,17 @@ const App = () => {
       .then(response => {
         console.log(response)
         setPersons(persons.concat(response.data))
-        //setPersons(persons.map(p => p.id !== response.data.id ? p : response.data))
+        setSuccessMessage(newName + " added")
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
+      })
+      .catch(error => {
+        setErrorMessage("Failed to add " + newName + ", Check console")
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        console.log(error)
       })
     setNewName('')
     setNewNumber('')
@@ -66,9 +97,16 @@ const App = () => {
         .then(response => {
           console.log("Deleted", response)
           setPersons(persons.filter(p => p.id !== id))
+          setSuccessMessage(name + " deleted")
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
         })
         .catch(error => {
-          Window.alert("Failed to remove from phonebook, check console")
+          setErrorMessage("Failed to delete " + name + ", check console")
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           console.log(error)
         })
     }
@@ -87,7 +125,9 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification className="error" message={errorMessage} />
+      <Notification className="success" message={successMessage} />
       <FilterForm value={nameFilter} onChange={handleNameFilterChange} />
       <h2>Add new</h2>
       <PersonForm onSubmit={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumChange={handleNumChange} />
