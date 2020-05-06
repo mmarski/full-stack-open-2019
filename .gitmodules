@@ -1,0 +1,3 @@
+[submodule "part3-full-stack-open"]
+	path = part3-full-stack-open
+	url = git@github.com:mmarski/part3-full-stack-open.git
