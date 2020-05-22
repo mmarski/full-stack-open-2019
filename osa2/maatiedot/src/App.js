@@ -6,7 +6,7 @@ function App() {
   const [ countryFilter, setCountryFilter ] = useState('')
   const [ showWeather, setShowWeather ] = useState(false)
   const [ weatherData, setWeatherData ] = useState({})
-  const weatherApiKey = "dc6864aadbf1a62fade2fe4fa7f5daa8"
+  const weatherApiKey = process.env.REACT_APP_API_KEY
 
   const handleCountryFilterChange = (event) => {
     setCountryFilter(event.target.value)

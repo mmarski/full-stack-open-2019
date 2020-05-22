@@ -13,6 +13,7 @@ Kierros2
     - DONE
     kurssitiedot2 toimii
     maatiedot toimii
+    weatherApiKey dc6864aadbf1a62fade2fe4fa7f5daa8
     puhelinluettelo toimii
     20 teht
 
