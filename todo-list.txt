@@ -1,17 +1,20 @@
 Kierros0
     - DONE
+    6 teht
 
 Kierros1
     - DONE
     kurssitiedot toimii
     anekdootit toimii
     unicafe toimii
+    14 teht
 
 Kierros2
     - DONE
     kurssitiedot2 toimii
     maatiedot toimii
     puhelinluettelo toimii
+    20 teht
 
 Kierros3
-    3.8 DONE
+    3.8 DONE ja varmistettu
