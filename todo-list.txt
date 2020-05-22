@@ -19,3 +19,10 @@ Kierros2
 
 Kierros3
     3.8 DONE ja varmistettu
+    puhelinluettelon persons.js pitää muuttaa suhteellinen url, ilman localhost:3001 osaa
+    Sitten herokuun full stackina
+    Pitää lisätä frontendiin Proxy jotta se toimii edelleen kierroksessa 2
+    ^ DONE.
+    Tee README.md ja lisää linkki internetissä olevaan sovellukseesi: DONE
+    Eli 3.11 asti DONE
+    Seuraava: Osa 3c
