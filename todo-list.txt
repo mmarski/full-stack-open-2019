@@ -3,9 +3,15 @@ Kierros0
 
 Kierros1
     - DONE
+    kurssitiedot toimii
+    anekdootit toimii
+    unicafe toimii
 
 Kierros2
     - DONE
+    kurssitiedot2 toimii
+    maatiedot toimii
+    puhelinluettelo toimii
 
 Kierros3
     3.8 DONE
