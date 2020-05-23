@@ -25,4 +25,7 @@ Kierros3
     ^ DONE.
     Tee README.md ja lisää linkki internetissä olevaan sovellukseesi: DONE
     Eli 3.11 asti DONE
-    Seuraava: Osa 3c
+    3.12 done
+    3.14 done
+    3.18 done
+    Osa 3c DONE
