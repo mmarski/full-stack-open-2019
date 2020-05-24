@@ -32,3 +32,7 @@ Kierros3
     3.19 done
     - Jotain 10 tuntii varmaan menny täs vaihees
     15h? Osa 3 DONE
+
+Kierros4
+    4.1 done
+    2h

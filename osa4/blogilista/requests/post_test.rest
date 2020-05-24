@@ -1,0 +1,9 @@
+post http://localhost:3003/api/blogs HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Best blog ever",
+    "author": "Seppo Taalasmaa",
+    "url": "String",
+    "likes": 2
+}
