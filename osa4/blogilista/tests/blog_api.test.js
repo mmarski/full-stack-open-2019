@@ -11,12 +11,12 @@ const initialBlogs = [
 // Reset database before each test
 beforeEach(async () => {
   await Blog.deleteMany({})
-
-  // await Blog.insertMany(initialBlogs)
-  initialBlogs.forEach(async (element) => {
+  await Blog.insertMany(initialBlogs)
+  // v Mieluummin normi forlooppi tähän, koska tossa käynnistyy joka kerta uus async "instanssi"
+  /*initialBlogs.forEach(async (element) => {
     let blogObj = new Blog(element)
     await blogObj.save()
-  })
+  })*/
 })
 
 describe('blog database', () => {
