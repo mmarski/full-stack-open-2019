@@ -12,6 +12,7 @@ const initialBlogs = [
 beforeEach(async () => {
   await Blog.deleteMany({})
 
+  // await Blog.insertMany(initialBlogs)
   initialBlogs.forEach(async (element) => {
     let blogObj = new Blog(element)
     await blogObj.save()
@@ -99,6 +100,50 @@ describe('blog posting', () => {
       .post('/api/blogs')
       .send(testBlog2)
       .expect(400)
+  })
+})
+
+describe('blog deletion', () => {
+
+  test('succeeds with valid id', async () => {
+    const res = await api.get('/api/blogs').expect(200)
+    const firstBlogId = res.body[0].id
+
+    await api.delete('/api/blogs/' + firstBlogId).expect(204)
+  })
+
+  test('fails with 404 or 400 using invalid id', async () => {
+    await api.delete('/api/blogs/invalidid').expect(400)
+    await api.delete('/api/blogs/aaaaaaaaaaaaaaaaaaaaaaaa').expect(404)
+  })
+})
+
+describe('blog modification', () => {
+
+  test('for likes succeeds with valid id', async () => {
+    const testBlog = {
+      title: "Testing",
+      author: "The Tester",
+      url: "test.fi",
+      likes: 1
+    }
+    const modifiedTestBlog = {
+      title: "Testing",
+      author: "The Tester",
+      url: "test.fi",
+      likes: 10
+    }
+
+    const posted = await api.post('/api/blogs/').send(testBlog).expect(201)
+    expect(posted.body.likes).toEqual(1)
+
+    const modified = await api.put('/api/blogs/' + posted.body.id).send(modifiedTestBlog).expect(200)
+    expect(modified.body.likes).toEqual(10)
+  })
+
+  test('fails with 404 or 400 using invalid id', async () => {
+    await api.put('/api/blogs/invalidid').send({}).expect(400)
+    await api.put('/api/blogs/aaaaaaaaaaaaaaaaaaaaaaaa').send({}).expect(404)
   })
 })
 
