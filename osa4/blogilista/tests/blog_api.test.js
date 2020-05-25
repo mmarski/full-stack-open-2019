@@ -18,11 +18,88 @@ beforeEach(async () => {
   })
 })
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('blog database', () => {
+
+  test('returns blogs as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('has the right amount of blogs', async () => {
+    const res = await api.get('/api/blogs')
+    expect(res.body).toHaveLength(initialBlogs.length)
+  })
+
+  test('json format contains the field "id"', async () => {
+    const res = await api.get('/api/blogs')
+    res.body.forEach(element => {
+      expect(element.id).toBeDefined()
+    })
+  })
+})
+
+describe('blog posting', () => {
+
+  test('is possible to the database', async () => {
+    const testBlog = {
+      title: "Testing",
+      author: "The Tester",
+      url: "test.fi",
+      likes: 5
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(testBlog)
+      .expect(201)
+
+    // Check that blog has been added
+    const response = await api.get('/api/blogs').expect(200)
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    const resBlogs = response.body.map(b => { delete b.id; return b })
+    expect(resBlogs).toContainEqual(testBlog)
+  })
+
+  test('gives the field "likes" default value of 0', async () => {
+    const testBlog = {
+      title: "Testing",
+      author: "The Tester",
+      url: "test.fi",
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(testBlog)
+      .expect(201)
+
+    // Check that blog has been set likes: 0
+    const response = await api.get('/api/blogs').expect(200)
+    const postedBlog = response.body.find(element => element.title === 'Testing')
+    expect(postedBlog.likes).toEqual(0)
+  })
+
+  test('requires blog title and url', async () => {
+    const testBlog = {
+      author: "The Tester",
+      url: "test.fi",
+    }
+    const testBlog2 = {
+      title: "Testing",
+      author: "The Tester",
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(testBlog)
+      .expect(400)
+
+    await api
+      .post('/api/blogs')
+      .send(testBlog2)
+      .expect(400)
+  })
 })
 
 // TODO database contains the right amount of blogs

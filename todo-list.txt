@@ -42,3 +42,4 @@ Kierros4
     5h
     4.8 todo: testidatabasen resetoinnin pitäs toimii, sit testaamaan löytyykö sieltä oikea määrä blogeja.
     6h
+    4.12 done, 8h
