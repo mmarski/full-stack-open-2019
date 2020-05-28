@@ -47,3 +47,4 @@ Kierros4
     10h
     Joku ongelma, kun ajaa kaikki testit ni toimii lol
     4.17 done, 16h
+    4.18 on kai done mut testit ei ja 4.19 wip. 17h
