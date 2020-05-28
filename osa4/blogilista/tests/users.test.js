@@ -35,6 +35,9 @@ describe('when user database is empty', () => {
 
     await api.post('/api/users').send(newUser).expect(400)
     await api.post('/api/users').send(newUser2).expect(400)
+
+    const res = await api.get('/api/users')
+    expect(res.body).toHaveLength(0)
   })
 
   test('username requirement, uniqueness and length of at least 3 characters is enforced', async () => {
@@ -55,8 +58,13 @@ describe('when user database is empty', () => {
 
     await api.post('/api/users').send(newUser).expect(400)
     await api.post('/api/users').send(newUser2).expect(400)
+    const res = await api.get('/api/users')
+    expect(res.body).toHaveLength(0)
+
     await api.post('/api/users').send(newUser3).expect(201)
     await api.post('/api/users').send(newUser3).expect(400)
+    const res2 = await api.get('/api/users')
+    expect(res2.body).toHaveLength(1)
   })
 })
 
