@@ -45,4 +45,5 @@ Kierros4
     4.12 done, 8h
     4.14 ja 4b done, 9h
     10h
-    Joku ongelma, varmaan pitää testaa userin postaus käsin eka
+    Joku ongelma, kun ajaa kaikki testit ni toimii lol
+    4.17 done, 15h
