@@ -117,15 +117,19 @@ describe('blog posting', () => {
       userId: testUserId
     }
 
-    await api
+    const result = await api
       .post('/api/blogs')
       .send(testBlog)
       .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('`title` is required')
 
-    await api
+    const result2 = await api
       .post('/api/blogs')
       .send(testBlog2)
       .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result2.body.error).toContain('`url` is required')
   })
 })
 
@@ -139,8 +143,15 @@ describe('blog deletion', () => {
   })
 
   test('fails with 404 or 400 using invalid id', async () => {
-    await api.delete('/api/blogs/invalidid').expect(400)
-    await api.delete('/api/blogs/aaaaaaaaaaaaaaaaaaaaaaaa').expect(404)
+    const result = await api
+      .delete('/api/blogs/invalidid')
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('malformed id')
+
+    await api
+      .delete('/api/blogs/aaaaaaaaaaaaaaaaaaaaaaaa')
+      .expect(404)
   })
 })
 
@@ -166,7 +177,13 @@ describe('blog modification', () => {
   })
 
   test('fails with 404 or 400 using invalid id', async () => {
-    await api.put('/api/blogs/invalidid').send({}).expect(400)
+    const result = await api
+      .put('/api/blogs/invalidid')
+      .send({})
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('malformed id')
+
     await api.put('/api/blogs/aaaaaaaaaaaaaaaaaaaaaaaa').send({}).expect(404)
   })
 })

@@ -33,8 +33,19 @@ describe('when user database is empty', () => {
       name: 'The Tester'
     }
 
-    await api.post('/api/users').send(newUser).expect(400)
-    await api.post('/api/users').send(newUser2).expect(400)
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('password must be at least 3 characters long')
+
+    const result2 = await api
+      .post('/api/users')
+      .send(newUser2)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result2.body.error).toContain('password must be at least 3 characters long')
 
     const res = await api.get('/api/users')
     expect(res.body).toHaveLength(0)
@@ -56,13 +67,34 @@ describe('when user database is empty', () => {
       password: 'testpassword'
     }
 
-    await api.post('/api/users').send(newUser).expect(400)
-    await api.post('/api/users').send(newUser2).expect(400)
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('shorter than the minimum allowed length')
+
+    const result2 = await api
+      .post('/api/users')
+      .send(newUser2)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result2.body.error).toContain('`username` is required')
+
     const res = await api.get('/api/users')
     expect(res.body).toHaveLength(0)
 
-    await api.post('/api/users').send(newUser3).expect(201)
-    await api.post('/api/users').send(newUser3).expect(400)
+    await api
+      .post('/api/users')
+      .send(newUser3)
+      .expect(201)
+    const result3 = await api
+      .post('/api/users')
+      .send(newUser3)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result3.body.error).toContain('expected `username` to be unique')
+
     const res2 = await api.get('/api/users')
     expect(res2.body).toHaveLength(1)
   })
