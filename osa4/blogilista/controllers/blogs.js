@@ -54,6 +54,29 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+  const token = request.token
+  console.log(token)
+
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  console.log(decodedToken)
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+
+  if (!user) {
+    return response.status(500).send({ error: 'user was not found' })
+  }
+
+  // TODO WTF, mitä tää findById palauttaa? jonkun oksennuksen missä ei ainakaan oo blog.user kenttää tjsp
+  const blogToBeDeleted = Blog.findById(request.params.id)
+  if (!blogToBeDeleted) {
+    return response.status(404).end()
+  }
+  console.log("user.id",user.id, "blogToBeDeleted",blogToBeDeleted)
+  if (user.id.toString() !== blogToBeDeleted.user.toString()) {
+    return response.status(401).send({ error: 'unauthorized user' })
+  }
 
   const deleted = await Blog.findByIdAndRemove(request.params.id)
 

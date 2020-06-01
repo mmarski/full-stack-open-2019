@@ -11,21 +11,29 @@ const initialBlogs = [
 ]
 let testUserId = undefined
 let testUserToken = undefined
+let testUser2Id = undefined
+let testUser2Token = undefined
 
 // Create user once
 beforeAll(async () => {
   await User.deleteMany({})
 
   const username = 'test'
+  const username2 = 'anotheruser'
   const password = 'testpassword'
   const passwordHash = await bcrypt.hash(password, 10)
   const user = new User({ username: username, name: 'The Tester', passwordHash: passwordHash })
+  const user2 = new User({ username: username2, name: 'maliciousguy', passwordHash: passwordHash })
   await user.save()
+  await user2.save()
   const response = await api.post('/api/login').send({ username, password })
+  const response2 = await api.post('/api/login').send({ username2, password })
 
   testUserId = user._id
   testUserToken = response.body.token
   initialBlogs.forEach(b => b.user = testUserId)
+  testUser2Id = user2._id
+  testUser2Token = response2.body.token
 })
 
 // Reset database before each test
@@ -177,19 +185,38 @@ describe('blog deletion', () => {
     const res = await api.get('/api/blogs').expect(200)
     const firstBlogId = res.body[0].id
 
-    await api.delete('/api/blogs/' + firstBlogId).expect(204)
+    await api
+      .delete('/api/blogs/' + firstBlogId)
+      .set('Authorization', 'bearer ' + testUserToken)
+      .expect(204)
   })
 
   test('fails with 404 or 400 using invalid id', async () => {
     const result = await api
       .delete('/api/blogs/invalidid')
+      .set('Authorization', 'bearer ' + testUserToken)
       .expect(400)
       .expect('Content-Type', /application\/json/)
     expect(result.body.error).toContain('malformed id')
 
     await api
       .delete('/api/blogs/aaaaaaaaaaaaaaaaaaaaaaaa')
+      .set('Authorization', 'bearer ' + testUserToken)
       .expect(404)
+  })
+
+  test('fails with 401 if the deleter is not the same user as blog poster', async () => {
+    // 4.21
+    const blogs = await api.get('/api/blogs').expect(200)
+    const firstBlogId = blogs.body[0].id
+
+    // Use the wrong user's token
+    const result = await api
+      .delete('/api/blogs/' + firstBlogId)
+      .set('Authorization', 'bearer ' + testUser2Token)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('unauthorized user')
   })
 })
 
