@@ -4,13 +4,13 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 // Authorization token
-function getTokenFrom(request) {
+/*function getTokenFrom(request) {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
   }
   return null
-}
+}*/
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -27,7 +27,7 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  const token = getTokenFrom(request)
+  const token = request.token
 
   const decodedToken = jwt.verify(token, process.env.SECRET)
   if (!token || !decodedToken.id) {
@@ -36,22 +36,21 @@ blogsRouter.post('/', async (request, response) => {
   const user = await User.findById(decodedToken.id)
 
   if (!user) {
-    response.status(500).send({ error: 'user was not found' })
+    return response.status(500).send({ error: 'user was not found' })
   }
-  else {
-    const blog = new Blog({
-      title: body.title,
-      url: body.url,
-      author: body.author,
-      likes: body.likes,
-      user: user._id
-    })
 
-    const savedBlog = await blog.save()
-    user.blogs = user.blogs.concat(savedBlog._id)
-    await user.save()
-    response.status(201).json(savedBlog)
-  }
+  const blog = new Blog({
+    title: body.title,
+    url: body.url,
+    author: body.author,
+    likes: body.likes,
+    user: user._id
+  })
+
+  const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+  response.status(201).json(savedBlog)
 })
 
 blogsRouter.delete('/:id', async (request, response) => {

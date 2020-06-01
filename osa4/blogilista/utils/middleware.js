@@ -3,6 +3,15 @@ const morgan = require('morgan')
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
 const requestLogger = morgan(':method :url :status :response-time ms - :res[content-length] :body - :req[content-length]')
 
+// Authorization token
+function tokenExtractor(req, res, next) {
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    req.token = authorization.substring(7)
+  }
+  next(req)
+}
+
 // olemattomien osoitteiden käsittely
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' })
@@ -26,4 +35,4 @@ const errorHandler = (error, req, res, next) => {
   next(error)
 }
 
-module.exports = { requestLogger, unknownEndpoint, errorHandler }
+module.exports = { requestLogger, tokenExtractor, unknownEndpoint, errorHandler }
