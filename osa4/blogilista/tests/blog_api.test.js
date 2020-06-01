@@ -74,7 +74,7 @@ describe('blog database', () => {
 
 describe('blog posting', () => {
 
-  test('is possible to the database', async () => {
+  test('is possible to the database, and the token holder is designated as blog owner', async () => {
     const testBlog = {
       title: "Testing",
       author: "The Tester",
@@ -83,11 +83,14 @@ describe('blog posting', () => {
       userId: testUserId
     }
 
-    await api
+    const postedBlog = await api
       .post('/api/blogs')
       .send(testBlog)
       .set('Authorization', 'bearer ' + testUserToken)
       .expect(201)
+
+    // Check that user id matches. testUserId on objekti
+    expect(postedBlog.body.user === testUserId.toString()).toBe(true)
 
     // Check that blog has been added
     const response = await api.get('/api/blogs').expect(200)
@@ -144,6 +147,27 @@ describe('blog posting', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
     expect(result2.body.error).toContain('`url` is required')
+  })
+
+  test('requires a valid token', async () => {
+    // 4.19
+    const testBlog = {
+      title: "Testing",
+      author: "The Tester",
+      url: "test.fi",
+      likes: 5,
+      userId: testUserId
+    }
+
+    // No authorization header set
+    await api
+      .post('/api/blogs')
+      .send(testBlog)
+      .expect(401)
+
+    // Check that blog has not been added
+    const response = await api.get('/api/blogs').expect(200)
+    expect(response.body).toHaveLength(initialBlogs.length)
   })
 })
 

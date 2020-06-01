@@ -105,7 +105,7 @@ describe('when there is one user in the database', () => {
     await User.deleteMany({})
 
     const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })
+    const user = new User({ username: 'root', name: 'ruutti', passwordHash })
 
     await user.save()
   })
@@ -121,6 +121,25 @@ describe('when there is one user in the database', () => {
     expect(res.body).toHaveLength(1)
     expect(res.body instanceof Array).toBe(true)
     expect(res.body[0].username).toEqual('root')
+  })
+
+  test('login is possible and returns token, username and name', async () => {
+    // 4.18
+    const loginInfo = {
+      username: 'root',
+      password: 'sekret'
+    }
+    const response = await api
+      .post('/api/login')
+      .send(loginInfo)
+      .expect(200)
+
+    const body = response.body
+    expect(body.token).toBeDefined()
+    expect(body.username).toBeDefined()
+    expect(body.name).toBeDefined()
+    expect(typeof body.token === 'string').toBe(true)
+    expect(typeof body.username === 'string').toBe(true)
   })
 })
 

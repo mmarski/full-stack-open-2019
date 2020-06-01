@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const usersRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
+//const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
 usersRouter.get('/', async (request, response) => {
