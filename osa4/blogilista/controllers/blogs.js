@@ -69,7 +69,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
 
   // TODO WTF, mitä tää findById palauttaa? jonkun oksennuksen missä ei ainakaan oo blog.user kenttää tjsp
-  const blogToBeDeleted = Blog.findById(request.params.id)
+  const blogToBeDeleted = await Blog.findById(request.params.id)
   if (!blogToBeDeleted) {
     return response.status(404).end()
   }
