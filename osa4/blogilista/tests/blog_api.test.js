@@ -27,7 +27,7 @@ beforeAll(async () => {
   await user.save()
   await user2.save()
   const response = await api.post('/api/login').send({ username, password })
-  const response2 = await api.post('/api/login').send({ username2, password })
+  const response2 = await api.post('/api/login').send({ username: username2, password })
 
   testUserId = user._id
   testUserToken = response.body.token
