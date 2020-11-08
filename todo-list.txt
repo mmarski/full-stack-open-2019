@@ -54,3 +54,5 @@ Kierros4
     4.21 oli väärä kirjautuminen testikäyttäjälle, fixd. 19h
     4.22 done
     Osa 4 DONE, 20h
+
+Kierros5
