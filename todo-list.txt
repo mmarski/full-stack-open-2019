@@ -56,3 +56,7 @@ Kierros4
     Osa 4 DONE, 20h
 
 Kierros5
+    5h
+    5.1 done
+    2h
+    5.2 done
