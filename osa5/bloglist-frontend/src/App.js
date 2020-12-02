@@ -7,9 +7,13 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -19,7 +23,6 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    console.log('using the effect')
     if (loggedUserJSON) {
       console.log('Got logged in user', loggedUserJSON)
       const user = JSON.parse(loggedUserJSON)
@@ -39,15 +42,18 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
-      console.log('Stringified', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
+      setSuccessMessage('Logged in successfully')
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     }
 
     catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setErrorMessage('Invalid username or password')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -57,6 +63,23 @@ const App = () => {
   const handleLogout = () => {
     setUser(null)
     window.localStorage.clear()
+  }
+
+  const createBlog = async (event) => {
+    event.preventDefault()
+    try {
+      const blog = await blogService.create({title: newBlogTitle, author: newBlogAuthor, url: newBlogUrl})
+      setSuccessMessage('Created new blog ' + blog.title + ' by ' + blog.author)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
+    }
+    catch (exception) {
+      setErrorMessage('Blog creation failed. ' + exception.response.data.error)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
 
   const loginForm = () => (
@@ -86,11 +109,43 @@ const App = () => {
     </div>
   )
 
+  const createBlogForm = () => (
+    <div>
+      <h2>Create new blog</h2>
+      <form onSubmit={createBlog}>
+        <div>
+          Title:
+            <input
+            type="text"
+            onChange={({ target }) => setNewBlogTitle(target.value)}
+          />
+        </div>
+        <div>
+          Author:
+            <input
+            type="text"
+            onChange={({ target }) => setNewBlogAuthor(target.value)}
+          />
+        </div>
+        <div>
+          Url:
+            <input
+            type="text"
+            onChange={({ target }) => setNewBlogUrl(target.value)}
+          />
+        </div>
+        <button type="submit">Create</button>
+      </form>
+    </div>
+  )
+
   const blogList = () => (
     <div>
       <h2>Blogs</h2>
 
       <p>{user.name} logged in <button onClick={handleLogout}>Log out</button></p>
+
+      {createBlogForm()}
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
@@ -100,7 +155,8 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={errorMessage} />
+      <Notification className="error" message={errorMessage} />
+      <Notification className="success" message={successMessage} />
 
       {user === null ? loginForm() : blogList()}
 
