@@ -12,6 +12,7 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+// SAATANA async ja thenit sekaisin! modaa tällaiseksi kaikki!
 const create = async newObject => {
   const config = {
     headers: { Authorization: token },
@@ -22,7 +23,7 @@ const create = async newObject => {
 }
 
 const update = (id, newObject) => {
-  const request = axios.put(`${ baseUrl } /${id}`, newObject)
+  const request = axios.put(`${ baseUrl }/${id}`, newObject)
   return request.then(response => response.data)
 }
 

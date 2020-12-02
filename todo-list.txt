@@ -69,3 +69,6 @@ Kierros5
     1h
     5.7 done
     useRef hookki done piilottamaan blogForm kun postataan
+    1h
+    5.8 done likenappi
+    KORJAA ASYNCIT JA THENIT SEKAISIN BLOGSIS !!!
