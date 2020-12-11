@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleBlogLike, handleRemoveBlog }) => {
+const Blog = ({ blog, userName, handleBlogLike, handleRemoveBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -12,6 +12,7 @@ const Blog = ({ blog, handleBlogLike, handleRemoveBlog }) => {
 
   const [visible, setVisible] = useState(false)
   const showWhenVisible = { display: visible ? '' : 'none' }
+  const showWhenCorrectUser = { display: blog.user.name === userName ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -35,13 +36,12 @@ const Blog = ({ blog, handleBlogLike, handleRemoveBlog }) => {
 
   return (
     <div style={blogStyle}>
-      <b>{blog.title}</b> <button onClick={toggleVisibility}>{visible ? 'Hide' : 'Show'}</button>
+      <b>{blog.title}</b> by {blog.author} <button onClick={toggleVisibility}>{visible ? 'Hide' : 'Show'}</button>
       <div style={showWhenVisible}>
         {blog.url}<br></br>
-        Author {blog.author}<br></br>
         User {blog.user.name}<br></br>
         Likes {blog.likes} <button onClick={likeBlog}>Like</button><br></br>
-        <button onClick={removeBlog}>Remove blog</button>
+        <button style={showWhenCorrectUser} onClick={removeBlog}>Remove blog</button>
       </div>
     </div>
   )
@@ -49,6 +49,7 @@ const Blog = ({ blog, handleBlogLike, handleRemoveBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
+  userName: PropTypes.string.isRequired,
   handleBlogLike: PropTypes.func.isRequired,
   handleRemoveBlog: PropTypes.func.isRequired
 }
