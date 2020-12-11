@@ -101,6 +101,26 @@ const App = () => {
     }
   }
 
+  const handleRemoveBlog = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    if (window.confirm('Really delete blog ' + blog.title + '?') === true) {
+      try {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(b => b.id !== id))
+        setSuccessMessage('Removed blog ' + blog.title)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      }
+      catch (exception) {
+        setErrorMessage('Failed to remove blog. ' + exception.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    }
+  }
+
   const loginForm = () => (
     <div>
       <LoginForm
@@ -131,16 +151,16 @@ const App = () => {
 
       {createBlogForm()}
 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleBlogLike={handleBlogLike} />
-      )}
+      {blogs.sort((a, b) => a.likes < b.likes ? 1 : -1) // Sort by likes
+        .map(blog => <Blog key={blog.id} blog={blog} handleBlogLike={handleBlogLike} handleRemoveBlog={handleRemoveBlog} />)
+      }
     </div>
   )
 
   return (
     <div>
-      <Notification className="error" message={errorMessage} />
-      <Notification className="success" message={successMessage} />
+      <Notification className='error' message={errorMessage} />
+      <Notification className='success' message={successMessage} />
 
       {user === null ? loginForm() : blogList()}
 

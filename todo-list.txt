@@ -71,4 +71,11 @@ Kierros5
     useRef hookki done piilottamaan blogForm kun postataan
     1h
     5.8 done likenappi
-    KORJAA ASYNCIT JA THENIT SEKAISIN BLOGSIS !!!
+    5.9 done
+    1h
+    5.10 done
+    5.11 done
+    1h
+    5.12 react linting done
+    -
+    
