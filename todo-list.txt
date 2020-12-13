@@ -78,4 +78,12 @@ Kierros5
     1h
     5.12 react linting done
     -
-    
+    Unit testit
+    1h
+    5.13 eka testi done
+    5.14 done
+    1h
+    5.15 done
+    5.16 done
+    -
+    End-to-end testit
