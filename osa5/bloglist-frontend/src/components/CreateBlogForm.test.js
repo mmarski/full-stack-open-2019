@@ -32,6 +32,6 @@ describe('<CreateBlogForm />', () => {
 
     fireEvent.submit(form)
     expect(mockHandler.mock.calls).toHaveLength(1)
-    expect(mockHandler.mock.calls[0][0]).toEqual({title: 'test title', author: 'test author', url: 'test.com'})
+    expect(mockHandler.mock.calls[0][0]).toEqual({ title: 'test title', author: 'test author', url: 'test.com' })
   })
 })

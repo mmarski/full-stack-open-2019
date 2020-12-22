@@ -87,3 +87,10 @@ Kierros5
     5.16 done
     -
     End-to-end testit
+    4h
+    5.17
+    ...
+    5.20 done
+    5.21 done
+    2h
+    Blogilistan likevertailu test edelleen TODO ...
