@@ -109,7 +109,7 @@ describe('Blog app', function() {
         cy.contains(/removed blog/i)
       })
 
-      it.only('blogs are sorted by most likes', function() {
+      it('blogs are sorted by most likes', function() {
         // Create blog 2
         cy.contains('Create New Blog').click()
         cy.get('#title').type('Ooga Booga')
@@ -126,35 +126,43 @@ describe('Blog app', function() {
         cy.contains(/created new blog/i)
 
         cy.get('.blogList').contains('Aku Ankka Seikkailee').parent().within(() => {
-          cy.contains('Show').click()
-          cy.get('.likeButton').click()
+          cy.contains('Show').click({force: true})
+          cy.wait(500)
+          cy.get('.likeButton').click({force: true})
         })
 
         cy.get('.blogList').contains('Uka Uka').parent().within(() => {
-          cy.contains('Show').click()
+          cy.contains('Show').click({force: true})
+          cy.wait(500)
           for(let n = 0; n < 2; n ++){
-            cy.get('.likeButton').click()
+            cy.get('.likeButton').click({force: true})
+            cy.contains('Likes ' + (n+1))
           }
         })
 
         cy.get('.blogList').contains('Ooga Booga').parent().within(() => {
-          cy.contains('Show').click()
+          cy.contains('Show').click({force: true})
+          cy.wait(500)
           for(let n = 0; n < 8; n ++){
-            cy.get('.likeButton').click()
+            cy.get('.likeButton').click({force: true})
+            cy.contains('Likes ' + (n+1))
           }
         })
 
-        cy.get('.blogList').each((el, i, array) => {
+        cy.get('.Blog').each((el, i, array) => {
           var pattern = /[0-9]+/g
           if (i > 0) {
-            cy.wrap(el).then((e) => {
-              const likes1 = e.text()
-              console.log(likes1)
-              console.log(likes1.match(pattern))
+            cy.wrap(el).within(() => {
+              cy.contains('Likes').then(likes => {
+                var amount = parseInt(likes.text().match(pattern))
+                cy.wrap(array[i-1]).within(() => {
+                  cy.contains('Likes').then(likes2 => {
+                    var amount2 = parseInt(likes2.text().match(pattern))
+                    expect(amount2).to.be.greaterThan(amount)
+                  })
+                })
+              })
             })
-            //.contains('Likes').match(pattern)
-            //const likes2 = array[i - 1].contains('Likes').match(pattern)
-            //cy.expect(likes1 - likes2).to.be.lessThan(0)
           }
         })
       })

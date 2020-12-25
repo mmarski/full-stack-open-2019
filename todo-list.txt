@@ -91,6 +91,8 @@ Kierros5
     5.17
     ...
     5.20 done
-    5.21 done
-    2h
-    Blogilistan likevertailu test edelleen TODO ...
+    5.21 remove test done
+    4h
+    5.22 likejärjestys ja osa 5 DONE
+    24h
+
