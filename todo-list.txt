@@ -96,3 +96,10 @@ Kierros5
     5.22 likejärjestys ja osa 5 DONE
     24h
 
+Kierros6
+    2h
+    6.2 unicaferedux done
+    6.4 anekdoottiäänestys ja add done
+    1h
+    6.6 done
+    6.8 ja 6a done
