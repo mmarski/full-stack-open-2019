@@ -103,3 +103,5 @@ Kierros6
     1h
     6.6 done
     6.8 ja 6a done
+    1h
+    6.10 notification reducer done
