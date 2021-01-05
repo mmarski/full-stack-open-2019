@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 /*const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -7,15 +9,15 @@
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]*/
 
-const getId = () => (100000 * Math.random()).toFixed(0)
+//const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = (anecdote) => {
+/*const asObject = (anecdote) => {
   return {
     content: anecdote,
     id: getId(),
     votes: 0
   }
-}
+}*/
 
 //const initialState = anecdotesAtStart.map(asObject)
 const initialState = []
@@ -28,39 +30,48 @@ const anecdoteReducer = (state = initialState, action) => {
     case 'SET_ANECDOTES':
       return state = action.data
     case 'NEW_ANECDOTE':
-      const anecdote = action.data.anecdote
-      return state.concat(asObject(anecdote))
+      return state.concat(action.data)
     case 'VOTE':
       const id = action.data.id
-      const anecdoteToVote = state.find(a => a.id === id)
-      const changedAnecdote = {
-        ...anecdoteToVote,
-        votes: anecdoteToVote.votes + 1
-      }
-      return state.map(anecdote => anecdote.id !== id ? anecdote : changedAnecdote)
+      return state.map(anecdote => anecdote.id !== id ? anecdote : action.data)
     default:
       return state
   }
 }
 
 export function voteAnecdote(id) {
-  return {
-    type: 'VOTE',
-    data: { id }
+  return async (dispatch, getState) => {
+    const anecdotes = getState().anecdotes
+    const anecdoteToVote = anecdotes.find(a => a.id === id)
+    const changedAnecdote = {
+      ...anecdoteToVote,
+      votes: anecdoteToVote.votes + 1
+    }
+    await anecdoteService.update(id, changedAnecdote)
+    dispatch({
+      type: 'VOTE',
+      data: changedAnecdote
+    })
   }
 }
 
 export function createAnecdote(anecdote) {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: { anecdote }
+  return async dispatch => {
+    const created = await anecdoteService.create(anecdote)
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: created
+    })
   }
 }
 
-export function setAnecdoteList(anecdoteList) {
-  return {
-    type: 'SET_ANECDOTES',
-    data: anecdoteList
+export function initAnecdotes() {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'SET_ANECDOTES',
+      data: anecdotes
+    })
   }
 }
 

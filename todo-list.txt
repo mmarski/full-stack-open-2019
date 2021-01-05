@@ -112,3 +112,8 @@ Kierros6
     -
     2h
     6.13 json-server getAll done
+    6.14 anekdootit backendiin done
+    3h
+    6.16 init ja create tehty thunkilla done
+    2h
+    6.17 äänestys kai done thunkil huhuh
