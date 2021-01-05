@@ -117,3 +117,6 @@ Kierros6
     6.16 init ja create tehty thunkilla done
     2h
     6.17 äänestys kai done thunkil huhuh
+    6.18 6c ja notifikaatio thunk done
+    -
+    
