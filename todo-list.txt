@@ -119,4 +119,9 @@ Kierros6
     6.17 äänestys kai done thunkil huhuh
     6.18 6c ja notifikaatio thunk done
     -
-    
+    1h
+    6.19 anecdotelist connect done
+    1h
+    6.20 filter ja anecdoteform connect done
+    6.21 ja osa 6 DONE!
+    14h
